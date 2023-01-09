@@ -1,4 +1,3 @@
-import MyNat.lemma
 import MyNat
 
 open MyNat

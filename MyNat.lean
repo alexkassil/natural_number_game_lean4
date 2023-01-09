@@ -47,7 +47,3 @@ instance : Mul MyNat where
 example : mul 4 3 = 12 := rfl
 example : mul 4 0 = 0 := rfl
 example : zero * 4 = 0 := rfl
-
-lemma example3 (a b: MyNat) (h: succ a = b) : succ (succ a) = succ b :=
-  by
-  sorry
