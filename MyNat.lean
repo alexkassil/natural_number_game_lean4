@@ -1,4 +1,5 @@
-/- Natural Number Game using Lean4 -/
+/- Natural Number Game using Lean 4 -/
+import MyNat.lemma
 
 inductive MyNat where
   | zero : MyNat
@@ -26,8 +27,12 @@ def add (m : MyNat) (n : MyNat) : MyNat :=
   | zero => m
   | succ n' => succ (add m n') -- n' is n - 1
 
+instance : Add MyNat where
+  add := add
+
 example : add 7 8 = 15 := rfl
 example : add 0 1 = 1 := rfl
+example : (0 : MyNat) + 1 = 1 := rfl
 
 def mul (m n : MyNat) : MyNat :=
   match n with
@@ -36,6 +41,13 @@ def mul (m n : MyNat) : MyNat :=
   -- 4 * 3 => 4 + 4 * 2 => 4 + 4 + 4 * 1 => 4 + 4 + 4 => 12
   | succ n' => add m (mul m n')
 
+instance : Mul MyNat where
+  mul := mul
+
 example : mul 4 3 = 12 := rfl
 example : mul 4 0 = 0 := rfl
-example : mul 0 4 = 0 := rfl 
+example : zero * 4 = 0 := rfl
+
+lemma example3 (a b: MyNat) (h: succ a = b) : succ (succ a) = succ b :=
+  by
+  sorry
