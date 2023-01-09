@@ -17,13 +17,13 @@ lemma example3 (a b: MyNat) (h: succ a = b) : succ (succ a) = succ b :=
   rewrite [h]
   rfl
 
-lemma add_zero (a : MyNat) : a + 0 = a :=
+lemma add_zero (a : MyNat) : a + zero = a :=
   by rfl
 
 lemma add_succ (a d : MyNat) : a + succ d = succ (a + d) :=
   by rfl
 
-lemma zero_succ_add (a : MyNat) : a + succ 0 = succ a :=
+lemma zero_succ_add (a : MyNat) : a + succ zero = succ a :=
   by
   rewrite [add_succ, add_zero]
   rfl
