@@ -8,18 +8,41 @@ lemma mul_succ (a b : MyNat) : a * succ b = a + (a * b) := by rfl
 
 lemma zero_mul (m : MyNat) : zero * m = zero :=
   by induction m with 
-  | zero => rw [mul_zero]
-  | succ m' ih => rw [mul_succ, ih, zero_add]
+  | zero => rewrite [mul_zero] rfl
+  | succ m' ih => rewrite [mul_succ, ih, zero_add] rfl
 
 lemma mul_one (m : MyNat) : m * 1 = m := 
-  by rw [one_eq_succ_zero, mul_succ, mul_zero, add_zero]
+  by rewrite [one_eq_succ_zero, mul_succ, mul_zero, add_zero] rfl
 
 lemma one_mul (m : MyNat) : 1 * m = m :=
   by induction m with
-  | zero => rw [mul_zero]
-  | succ m' ih => rw [mul_succ, ih, add_comm, succ_eq_add_one]
+  | zero => rewrite [mul_zero] rfl
+  | succ m' ih => rewrite [mul_succ, ih, add_comm, succ_eq_add_one] rfl
 
 lemma mul_add (t a b : MyNat) : t * (a + b) = t * a + t * b :=
   by induction b with 
-  | zero => rw [mul_zero, add_zero, add_zero]
-  | succ b' ih => rw [add_comm, succ_add, mul_succ, add_comm b' a, ih, ←add_assoc, add_right_comm, ← mul_succ, add_comm]
+  | zero => rewrite [mul_zero, add_zero, add_zero] rfl
+  | succ b' ih => rewrite [add_comm, succ_add, mul_succ, add_comm b' a, ih, ←add_assoc, add_right_comm, ← mul_succ, add_comm] rfl
+
+lemma mul_assoc (a b c : MyNat) : (a * b) * c = a * (b * c) := 
+  by induction c with
+  | zero => rewrite [mul_zero, mul_zero, mul_zero] rfl
+  | succ c' ih => rewrite [mul_succ, mul_succ, mul_add, ih] rfl
+
+lemma succ_mul (a b : MyNat) : (succ a) * b = a * b + b := 
+  by induction b with 
+  | zero => rewrite [mul_zero, mul_zero, add_zero] rfl
+  | succ b' ih => rewrite [mul_succ, mul_succ, ih, ←add_assoc, add_right_comm, succ_add, add_comm a b', ←succ_add, add_comm (succ b') a, add_right_comm] rfl
+
+lemma add_mul (a b t : MyNat) : (a + b) * t = a * t + b * t :=
+  by induction t with
+  | zero => rewrite [mul_zero, mul_zero, mul_zero, add_zero] rfl
+  | succ t' ih => rewrite [mul_succ, ih, add_right_comm, ←add_assoc, ←mul_succ, add_right_comm, add_assoc, ←mul_succ] rfl
+
+lemma mul_comm (a b : MyNat) : a * b = b * a := 
+  by induction b with
+  | zero => rewrite [mul_zero, zero_mul] rfl
+  | succ b' ih => rewrite [mul_succ, succ_mul, ih, add_comm] rfl
+
+lemma mul_left_comm (a b c : MyNat) : a * (b * c) = b * (a * c) :=
+  by rewrite [mul_comm, mul_assoc, mul_comm c a] rfl
