@@ -37,7 +37,6 @@ example : (0 : MyNat) + 1 = 1 := rfl
 def mul (m n : MyNat) : MyNat :=
   match n with
   | zero => zero
-  | succ (zero) => m
   -- 4 * 3 => 4 + 4 * 2 => 4 + 4 + 4 * 1 => 4 + 4 + 4 => 12
   | succ n' => add m (mul m n')
 
