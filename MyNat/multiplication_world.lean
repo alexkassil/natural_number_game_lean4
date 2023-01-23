@@ -39,6 +39,9 @@ lemma add_mul (a b t : MyNat) : (a + b) * t = a * t + b * t :=
   | zero => rewrite [mul_zero, mul_zero, mul_zero, add_zero] rfl
   | succ t' ih => rewrite [mul_succ, ih, add_right_comm, ←add_assoc, ←mul_succ, add_right_comm, add_assoc, ←mul_succ] rfl
 
+lemma add_same (m : MyNat) : m + m = 2 * m :=
+  by rewrite [←one_mul m, ←add_mul, one_eq_succ_zero, succ_add, zero_add, ←one_eq_succ_zero, ←two_eq_succ_one, one_mul] rfl
+
 lemma mul_comm (a b : MyNat) : a * b = b * a := 
   by induction b with
   | zero => rewrite [mul_zero, zero_mul] rfl

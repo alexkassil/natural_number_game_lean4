@@ -38,6 +38,7 @@ lemma add_comm (a b : MyNat) : a + b = b + a :=
   | succ b' ih => rewrite [add_succ, succ_add, ih] rfl
 
 lemma one_eq_succ_zero : 1 = succ zero := by rfl
+lemma two_eq_succ_one :  2 = succ 1    := by rfl
 
 lemma succ_eq_add_one (n : MyNat) : succ n = n + 1 :=
   by induction n with
@@ -46,3 +47,4 @@ lemma succ_eq_add_one (n : MyNat) : succ n = n + 1 :=
 
 lemma add_right_comm (a b c : MyNat) : a + b + c = a + c + b :=
   by rewrite [add_assoc, add_comm b c, add_assoc a c b] rfl
+
