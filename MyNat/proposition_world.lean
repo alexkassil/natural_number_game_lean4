@@ -1,4 +1,5 @@
 import MyNat.lemma
+open Lean Core
 
 example (P Q : Prop) (p : P) (h : P → Q) : Q := by
   exact h p
@@ -42,7 +43,12 @@ lemma imp_trans (P Q R : Prop) : (P → Q) → ((Q → R) → (P → R)) := by
   intro hpq hqr p
   exact hqr (hpq p)
 
+lemma not_iff_imp_false (P : Prop) : ¬ P ↔ (P → False) := by
+  rewrite [Not]
+  exact Iff.rfl
+
 lemma contrapositive (P Q : Prop) : (P → Q) → (¬ Q → ¬ P) := by
+  rewrite [not_iff_imp_false, not_iff_imp_false]
   intro a b c
   apply b
   apply a
