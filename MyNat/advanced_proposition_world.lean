@@ -61,3 +61,29 @@ lemma or_symm (P Q : Prop) : P ∨ Q -> Q ∨ P := by
     (Or.inl)
   ) 
 
+lemma alexs_discovery (P Q R : Prop) : 
+  P → (P ∨ Q) ∧ (P ∨ R) := by
+  intro p
+  exact ⟨Or.inl p, Or.inl p⟩
+
+lemma and_or_distrib_left (P Q R : Prop) : 
+  P ∧ (Q ∨ R) ↔ (P ∧ Q) ∨ (P ∧ R) := by
+  constructor 
+  intro p_and_qr
+  let p := (p_and_qr.left)
+  let qr := (p_and_qr.right)
+  exact (
+    Or.elim qr
+    (fun q => Or.inl (And.intro p q))
+    (fun r => Or.inr (And.intro p r))
+  )
+  intro p_and_q_or_p_and_r
+  exact (
+    Or.elim p_and_q_or_p_and_r
+    (fun pq => 
+      And.intro pq.left (Or.inl pq.right)
+    )
+    (fun pr =>
+      And.intro pr.left (Or.inr pr.right)
+    )
+  )
