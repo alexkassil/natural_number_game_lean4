@@ -37,5 +37,27 @@ lemma iff_trans (P Q R : Prop) : (P ↔ Q) → (Q ↔ R) → (P ↔ R) := by
   intro r
   exact (qp (rq r))
 
+example (P Q R : Prop) : (P ↔ Q) → (Q ↔ R) → (P ↔ R) := by
+  intro hpq hqr
+  constructor 
+  intro p
+  apply (Iff.mp hqr)
+  apply (Iff.mp hpq)
+  exact p
+  intro r
+  rewrite [hpq, hqr]
+  exact r
 
+example (P Q : Prop) : Q → (P ∨ Q) := by
+ intro q
+ exact (Or.inr q)
+
+lemma or_symm (P Q : Prop) : P ∨ Q -> Q ∨ P := by
+  intro pq
+  exact (
+    Or.elim 
+    pq
+    (Or.inr)
+    (Or.inl)
+  ) 
 
