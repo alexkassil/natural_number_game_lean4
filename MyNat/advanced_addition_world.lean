@@ -41,8 +41,50 @@ theorem add_right_cancel (a t b : ℕ) :
     let h' := (succ_inj (a + t') (b + t') h)
     apply (ih h')
 
-
 theorem add_left_cancel (t a b : ℕ) :
   t + a = t + b → a = b := by
   rewrite [add_comm, add_comm t b]
   exact add_right_cancel a t b
+
+theorem add_right_cancel_iff (t a b : ℕ) :
+  a + t = b + t ↔ a = b := by
+  constructor 
+  exact add_right_cancel _ _ _
+  intro h
+  rewrite [h]
+  rfl
+
+lemma eq_zero_of_add_right_eq_self (a b : ℕ) :
+  a + b = a → b = 0 := by
+  rewrite [←add_zero a, add_assoc, zero_add]
+  intro h
+  exact add_left_cancel _ _ _ h
+
+theorem succ_ne_zero (a : ℕ) : succ a ≠ 0 := by
+  intro h
+  exact zero_ne_succ a h.symm
+
+lemma add_left_eq_zero 
+  (a b : ℕ) (H : a + b = 0) : b = 0 := by
+  cases b with 
+  | zero => rfl
+  | succ b' => 
+    rewrite [add_succ] at H
+    exact False.elim (succ_ne_zero (a + b') H)
+
+lemma add_right_eq_zero (a b : ℕ) : 
+  a + b = 0 → a = 0 := by
+  rewrite [add_comm]
+  exact add_left_eq_zero _ _
+
+lemma add_one_eq_succ (d : ℕ) : d + 1 = succ d := by
+  apply Eq.symm _
+  exact succ_eq_add_one _
+
+lemma ne_succ_self (n : ℕ) : n ≠ succ n := by
+  rewrite [succ_eq_add_one, ←add_zero n, add_assoc, zero_add]
+  intro h
+  let f := add_left_cancel _ _ _ h
+  rewrite [one_eq_succ_zero] at f
+  exact zero_ne_succ zero f
+  
