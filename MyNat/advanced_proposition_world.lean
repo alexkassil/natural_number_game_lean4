@@ -1,4 +1,5 @@
 import MyNat
+import MyNat.proposition_world
 
 open MyNat
 
@@ -87,3 +88,31 @@ lemma and_or_distrib_left (P Q R : Prop) :
       And.intro pr.left (Or.inr pr.right)
     )
   )
+
+lemma contra (P Q : Prop) : (P ∧ ¬ P) → Q := by
+  intro pandnotp
+  let p := pandnotp.left
+  let notp := pandnotp.right
+  -- rewrite [not_iff_imp_false] at notp
+  -- let false := (notp p)
+  -- exact False.elim false
+  exact (absurd p notp)
+
+lemma contrapositive2 (P Q : Prop) : 
+  (¬Q → ¬P) → (P → Q) := by 
+  intro h p
+  by_cases p : P
+  case inl p' => 
+    . by_cases q : Q
+      . case inl => exact q
+      . case inr => exact absurd p (h q)
+  case inr p' => 
+    . by_cases q : Q
+      . case _ => exact q
+      . case inr => exact absurd p' p
+
+lemma full_contrapositive (P Q : Prop) : 
+  (¬Q → ¬P) ↔ (P → Q) := by
+  constructor
+  exact contrapositive2 P Q
+  exact contrapositive  P Q
