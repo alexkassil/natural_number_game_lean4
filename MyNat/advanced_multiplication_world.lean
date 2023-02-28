@@ -53,3 +53,32 @@ theorem mul_eq_zero_iff (a b : ℕ) :
     )
   )
   }
+
+theorem mul_left_cancel (a b c : ℕ) 
+  (ha : a ≠ 0) : a * b = a * c → b = c := by
+  intro h
+  induction c generalizing b with 
+  | zero => 
+    rewrite [mul_zero] at h
+    let f := eq_zero_or_eq_zero_of_mul_eq_zero _ _ h
+    exact (
+      Or.elim f
+      (fun a0 => False.elim (ha.elim a0))
+      id
+    )
+  | succ c' ih => 
+    induction b with 
+    | zero =>  
+      rewrite [mul_zero] at h
+      let f := eq_zero_or_eq_zero_of_mul_eq_zero _ _ h.symm
+      exact (
+        Or.elim f
+        (fun a0 => False.elim (ha.elim a0))
+        Eq.symm
+      )
+    | succ b' _ => 
+      rewrite [mul_succ, mul_succ] at h
+      let f := add_left_cancel _ _ _ h
+      let f' := (ih b') f
+      rewrite [f']
+      rfl
