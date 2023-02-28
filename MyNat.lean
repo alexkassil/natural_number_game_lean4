@@ -18,6 +18,8 @@ def nat_to_mynat (n : Nat): ℕ :=
 instance : OfNat ℕ n where
  ofNat := nat_to_mynat n
 
+theorem zero_equal_numeral : 0 = zero := by rfl
+
 def mynat_to_nat (n : ℕ): Nat :=
   match n with
   | MyNat.zero => Nat.zero

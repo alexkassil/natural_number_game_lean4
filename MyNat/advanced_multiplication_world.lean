@@ -34,3 +34,22 @@ theorem eq_zero_or_eq_zero_of_mul_eq_zero (a b : ℕ)
       let neb := succ_ne_zero b'
       let f := mul_pos (succ a') (succ b') nea neb
       exact (False.elim (Ne.elim f h))
+
+theorem mul_eq_zero_iff (a b : ℕ) :
+  a * b = 0 ↔ a = 0 ∨ b = 0 := by
+  constructor 
+  { exact eq_zero_or_eq_zero_of_mul_eq_zero a b }
+  { intro h
+  exact (
+    h.elim
+    (fun a0 => by
+      rewrite [a0, zero_equal_numeral, zero_mul]
+      rfl
+
+    )
+    (fun b0 => by
+      rewrite [b0, zero_equal_numeral, mul_zero]
+      rfl
+    )
+  )
+  }
