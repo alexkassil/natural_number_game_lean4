@@ -1,5 +1,7 @@
 import MyNat.le
 import MyNat.addition_world
+import MyNat.advanced_addition_world
+import MyNat.advanced_proposition_world
 
 open MyNat
 
@@ -34,3 +36,45 @@ theorem le_trans (a b c : ℕ)
   rewrite [←add_assoc, ←hab']
   exact hbc'
     
+theorem le_antisem (a b : ℕ)
+  (hab : a ≤ b) (hba : b ≤ a) : a = b := by
+  cases hab with 
+  | intro c hab => 
+  cases hba with
+  | intro c' hba => 
+  rewrite [hab, add_assoc,]at hba
+  have h1 := eq_zero_of_add_right_eq_self _ _ (Eq.symm hba)
+  have h2 := add_left_eq_zero _ _ h1
+  rewrite [h2, zero_equal_numeral, add_zero] at h1
+  rewrite [h1, add_zero] at hab
+  exact (Eq.symm hab)
+
+theorem le_zero (a : ℕ) (h : a ≤ 0) : a = 0 := by
+  cases h with 
+  | intro _ h =>
+  exact add_right_eq_zero _ _ (Eq.symm h)
+
+theorem le_total (a b : ℕ) : a ≤ b ∨ b ≤ a := by
+  induction b with
+  | zero => exact (Or.inr (zero_le a))
+  | succ b ih => 
+  exact (
+    Or.elim
+    ih
+    (fun a_le_b => Or.inl (le_succ _ _ a_le_b))
+    (fun b_le_a => by
+      rewrite [le_iff_exists_add] at b_le_a
+      cases b_le_a with
+      | intro c h => 
+        cases c with
+        | zero => 
+          rewrite [add_zero] at h
+          rewrite [h, succ_eq_add_one, add_comm]
+          exact (Or.inl (one_add_le_self b))
+        | succ c => 
+          apply Or.inr
+          exists c
+          rewrite [add_succ, add_comm, ←add_succ, ←add_comm] at h
+          trivial
+    )
+  )
