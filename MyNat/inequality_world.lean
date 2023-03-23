@@ -78,3 +78,26 @@ theorem le_total (a b : ℕ) : a ≤ b ∨ b ≤ a := by
           trivial
     )
   )
+
+lemma le_succ_self (a : ℕ) : a ≤ succ a := by
+  rewrite [←add_one_eq_succ, add_comm]
+  exact one_add_le_self a
+
+theorem add_le_add_right (a b : ℕ) : 
+  a ≤ b → ∀ t, (a + t) ≤ (b + t) := by
+  intro h
+  intro t
+  cases h with
+  | intro c h => 
+    exists c
+    rewrite [h, add_right_comm]
+    rfl
+
+theorem le_of_succ_le_succ (a b : ℕ) : 
+  succ a ≤ succ b → a ≤ b := by
+  intro h
+  cases h with
+  | intro c h =>
+    exists c
+    rewrite [succ_add] at h
+    exact succ_inj b (a + c) h 
