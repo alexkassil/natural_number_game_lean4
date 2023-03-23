@@ -100,4 +100,22 @@ theorem le_of_succ_le_succ (a b : ℕ) :
   | intro c h =>
     exists c
     rewrite [succ_add] at h
-    exact succ_inj b (a + c) h 
+    exact succ_inj b (a + c) h
+
+theorem not_succ_le_self (a : ℕ) : ¬ (succ a ≤ a) := by
+  rewrite [succ_eq_add_one, ←add_zero a, add_assoc, zero_add]
+  intro h
+  cases h with
+  | intro c h =>
+    rewrite [add_assoc] at h
+    let f := add_left_cancel a zero (1 + c) h
+    rewrite [add_comm, ←succ_eq_add_one] at f
+    exact zero_ne_succ c f
+
+theorem add_le_add_left (a b t : ℕ) 
+  (h : a ≤ b) : t + a ≤ t + b := by
+  cases h with
+  | intro c h => 
+    exists c
+    rewrite [h, add_assoc]
+    rfl
