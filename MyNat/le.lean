@@ -9,3 +9,8 @@ instance : LE ℕ where
 
 theorem le_iff_exists_add (a b : ℕ) : 
   a ≤ b ↔ ∃ (c : ℕ), b = a + c := Iff.rfl
+
+def lt (a b : ℕ) := a ≤ b ∧ ¬ (b ≤ a)
+
+instance : LT ℕ where
+  lt := lt

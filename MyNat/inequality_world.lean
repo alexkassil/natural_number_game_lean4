@@ -119,3 +119,48 @@ theorem add_le_add_left (a b t : ℕ)
     exists c
     rewrite [h, add_assoc]
     rfl
+
+#check LE.le
+
+-- a < b := a ≤ b ∧ ¬ (b ≤ a)
+-- a < b := succ(a) ≤ b
+
+lemma lt_aux_one (a b : ℕ) : 
+  a ≤ b ∧ ¬ (b ≤ a) → succ a ≤ b := by
+  intro h
+  have h1 := h.left
+  have h2 := h.right
+  cases h1 with
+  | intro c h1 =>
+    cases c with
+    | zero =>
+      apply False.elim
+      apply h2
+      exists 0
+      rewrite [add_zero] at h1
+      rewrite [h1]
+      rfl
+    | succ c => 
+      exists c
+      rewrite [add_succ, ←succ_add] at h1
+      exact h1
+
+lemma lt_aux_two (a b : ℕ) : 
+  succ a ≤ b → a ≤ b ∧ ¬ (b ≤ a) := by
+  intro h1
+  constructor
+  exact le_trans a (succ a) b (le_succ_self a) h1
+  intro h2
+  cases h1 with 
+  | intro c h1 =>
+  cases h2 with
+  | intro d h2 =>
+  rewrite [h1] at h2
+  apply zero_ne_succ (c + d)
+  rewrite [succ_add, add_comm a, ←succ_add, add_comm _ a, ←add_zero a, add_assoc, add_assoc] at h2
+  have h3 := add_left_cancel a _ _ h2
+  rewrite [zero_add, succ_add] at h3
+  exact h3  
+
+lemma lt_iff_succ_le (a b : ℕ) : a < b ↔ succ a ≤ b :=
+   ⟨lt_aux_one a b, lt_aux_two a b⟩
