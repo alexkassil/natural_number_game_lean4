@@ -40,18 +40,18 @@ theorem mul_eq_zero_iff (a b : ℕ) :
   constructor 
   { exact eq_zero_or_eq_zero_of_mul_eq_zero a b }
   { intro h
-  exact (
-    h.elim
-    (fun a0 => by
-      rewrite [a0, zero_equal_numeral, zero_mul]
-      rfl
+    exact (
+      h.elim
+      (fun a0 => by
+        rewrite [a0, zero_equal_numeral, zero_mul]
+        rfl
 
+      )
+      (fun b0 => by
+        rewrite [b0, zero_equal_numeral, mul_zero]
+        rfl
+      )
     )
-    (fun b0 => by
-      rewrite [b0, zero_equal_numeral, mul_zero]
-      rfl
-    )
-  )
   }
 
 theorem mul_left_cancel (a b c : ℕ) 
