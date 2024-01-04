@@ -2,18 +2,19 @@ import MyNat.le
 import MyNat.addition_world
 import MyNat.advanced_addition_world
 import MyNat.advanced_proposition_world
+import Mathlib.Init.Order.Defs
 
-open MyNat
+namespace MyNat
 
-lemma one_add_le_self (x : ℕ) : x ≤ 1 + x := by
+lemma one_add_le_self (x : 𝕟) : x ≤ 1 + x := by
   exists 1
   rewrite [add_comm]
   rfl
 
-lemma le_refl (x : ℕ) : x ≤ x := by
+lemma le_refl (x : 𝕟) : x ≤ x := by
   exists 0
 
-theorem le_succ (a b : ℕ) : a ≤ b → a ≤ succ b := by
+theorem le_succ (a b : 𝕟) : a ≤ b → a ≤ succ b := by
   intro h
   cases h with
   | intro c h' => 
@@ -21,12 +22,12 @@ theorem le_succ (a b : ℕ) : a ≤ b → a ≤ succ b := by
     rewrite [h', add_succ]
     rfl
 
-lemma zero_le (a : ℕ) : 0 ≤ a := by
+lemma zero_le (a : 𝕟) : 0 ≤ a := by
   induction a with
   | zero => exact le_refl zero
   | succ a' h => exact le_succ zero a' h
 
-theorem le_trans (a b c : ℕ) 
+theorem le_trans (a b c : 𝕟) 
   (hab : a ≤ b) (hbc : b ≤ c) : a ≤ c := by 
   cases hab with 
   | intro d hab' =>
@@ -36,7 +37,7 @@ theorem le_trans (a b c : ℕ)
   rewrite [←add_assoc, ←hab']
   exact hbc'
     
-theorem le_antisem (a b : ℕ)
+theorem le_antisymm (a b : 𝕟)
   (hab : a ≤ b) (hba : b ≤ a) : a = b := by
   cases hab with 
   | intro c hab => 
@@ -49,12 +50,12 @@ theorem le_antisem (a b : ℕ)
   rewrite [h1, add_zero] at hab
   exact (Eq.symm hab)
 
-theorem le_zero (a : ℕ) (h : a ≤ 0) : a = 0 := by
+theorem le_zero (a : 𝕟) (h : a ≤ 0) : a = 0 := by
   cases h with 
   | intro _ h =>
   exact add_right_eq_zero _ _ (Eq.symm h)
 
-theorem le_total (a b : ℕ) : a ≤ b ∨ b ≤ a := by
+theorem le_total (a b : 𝕟) : a ≤ b ∨ b ≤ a := by
   induction b with
   | zero => exact (Or.inr (zero_le a))
   | succ b ih => 
@@ -79,11 +80,11 @@ theorem le_total (a b : ℕ) : a ≤ b ∨ b ≤ a := by
     )
   )
 
-lemma le_succ_self (a : ℕ) : a ≤ succ a := by
+lemma le_succ_self (a : 𝕟) : a ≤ succ a := by
   rewrite [←add_one_eq_succ, add_comm]
   exact one_add_le_self a
 
-theorem add_le_add_right (a b : ℕ) : 
+theorem add_le_add_right (a b : 𝕟) : 
   a ≤ b → ∀ t, (a + t) ≤ (b + t) := by
   intro h
   intro t
@@ -93,7 +94,7 @@ theorem add_le_add_right (a b : ℕ) :
     rewrite [h, add_right_comm]
     rfl
 
-theorem le_of_succ_le_succ (a b : ℕ) : 
+theorem le_of_succ_le_succ (a b : 𝕟) : 
   succ a ≤ succ b → a ≤ b := by
   intro h
   cases h with
@@ -102,7 +103,7 @@ theorem le_of_succ_le_succ (a b : ℕ) :
     rewrite [succ_add] at h
     exact succ_inj b (a + c) h
 
-theorem not_succ_le_self (a : ℕ) : ¬ (succ a ≤ a) := by
+theorem not_succ_le_self (a : 𝕟) : ¬ (succ a ≤ a) := by
   rewrite [succ_eq_add_one, ←add_zero a, add_assoc, zero_add]
   intro h
   cases h with
@@ -112,7 +113,7 @@ theorem not_succ_le_self (a : ℕ) : ¬ (succ a ≤ a) := by
     rewrite [add_comm, ←succ_eq_add_one] at f
     exact zero_ne_succ c f
 
-theorem add_le_add_left (a b t : ℕ) 
+theorem add_le_add_left (a b t : 𝕟) 
   (h : a ≤ b) : t + a ≤ t + b := by
   cases h with
   | intro c h => 
@@ -125,7 +126,7 @@ theorem add_le_add_left (a b t : ℕ)
 -- a < b := a ≤ b ∧ ¬ (b ≤ a)
 -- a < b := succ(a) ≤ b
 
-lemma lt_aux_one (a b : ℕ) : 
+lemma lt_aux_one (a b : 𝕟) : 
   a ≤ b ∧ ¬ (b ≤ a) → succ a ≤ b := by
   intro h
   have h1 := h.left
@@ -145,7 +146,7 @@ lemma lt_aux_one (a b : ℕ) :
       rewrite [add_succ, ←succ_add] at h1
       exact h1
 
-lemma lt_aux_two (a b : ℕ) : 
+lemma lt_aux_two (a b : 𝕟) : 
   succ a ≤ b → a ≤ b ∧ ¬ (b ≤ a) := by
   intro h1
   constructor
@@ -162,5 +163,12 @@ lemma lt_aux_two (a b : ℕ) :
   rewrite [zero_add, succ_add] at h3
   exact h3  
 
-lemma lt_iff_succ_le (a b : ℕ) : a < b ↔ succ a ≤ b :=
+lemma lt_iff_succ_le (a b : 𝕟) : a < b ↔ succ a ≤ b :=
    ⟨lt_aux_one a b, lt_aux_two a b⟩
+
+instance : Preorder 𝕟 where
+  le_refl := le_refl
+  le_trans := le_trans
+
+instance : PartialOrder 𝕟 where
+  le_antisymm := le_antisymm

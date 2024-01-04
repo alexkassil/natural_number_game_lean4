@@ -1,7 +1,7 @@
 import MyNat
 import MyNat.proposition_world
 
-open MyNat
+namespace MyNat
 
 example (P Q : Prop) (p : P) (q : Q) : P ∧ Q := by
   constructor 

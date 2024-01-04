@@ -1,11 +1,11 @@
 import MyNat
 
-open MyNat
+namespace MyNat
 
 example (P Q : Type) (p : P) (h : P -> Q) : Q := by
   exact h p
 
-example : ℕ -> ℕ := by 
+example : 𝕟 -> 𝕟 := by 
   intro n
   exact 3 * n + 2
 
